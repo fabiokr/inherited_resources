@@ -122,6 +122,10 @@ end
 class ImageButtonsController < ButtonsController
 end
 
+class Admin::BaseController < InheritedResources::Base
+end
+class GamesController < Admin::BaseController
+end
 
 # Create a TestHelper module with some helpers
 class UrlHelpersTest < ActiveSupport::TestCase
@@ -780,6 +784,18 @@ class UrlHelpersTest < ActiveSupport::TestCase
     controller.send("edit_resource_path")
     controller.expects("delete_image_button_path").once
     controller.send("delete_resource_path")
+  end
+
+  def test_helpers_on_namespaced_parent_inherited_controller
+    controller = GamesController.new
+    controller.expects("games_path").once
+    controller.send("collection_path")
+    controller.expects("edit_game_path").once
+    controller.send("edit_resource_path")
+    controller.expects("new_game_path").once
+    controller.send("new_resource_path")
+    controller.expects("game_path").once
+    controller.send("resource_path")
   end
 
   def test_url_helpers_on_namespaced_resource_with_shallowed_route
